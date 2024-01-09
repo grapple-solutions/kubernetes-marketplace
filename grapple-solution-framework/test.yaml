@@ -1,6 +1,6 @@
 gras: {}
 grapi:
-  beimagetag: "v0.112"
+  beimagetag: "v0.113"
   discoveredrepos: true
   ingress: true
   initContainers:
@@ -105,7 +105,7 @@ grapi:
       datasource: "db"
 
 gruim:
-  uiimagetag: "0.1.34"
+  uiimagetag: "0.1.37"
   style: '{"colors":{"primary":{"DEFAULT":"#34344A","fg":"#fff"},"accent":{"DEFAULT":"#CC5A71","fg":"#fff"}}}'
   config: ""
   additionalpackages: ""
