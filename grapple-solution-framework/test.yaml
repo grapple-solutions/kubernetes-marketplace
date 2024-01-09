@@ -11,7 +11,8 @@ grapi:
       command: ['sh', '-c', "if ! test -f /data/db.json; then while ! test -f /tmp/db.json; do echo -n .; sleep 2; done; echo; cp /tmp/db.json /data; fi"]
   volumes:
   - name: data
-    emptyDir: {}
+    # emptyDir: {}
+    persistentVolumeClaim: grapi-file
   volumeMounts:
   - name: data
     mountPath: /data

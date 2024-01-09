@@ -1,7 +1,7 @@
 #!/bin/bash
 
 NS=grpl-system
-TESTNS=grpl-test
+TESTNS=grpl-dbfile
 
 kubectl delete gras --all -A 2>/dev/null | true
 kubectl delete gruim --all -A 2>/dev/null | true

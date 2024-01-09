@@ -18,7 +18,7 @@ kubectl wait -n grpl-system configurations grpl --for condition=Healthy=True --t
 The deployment of the test case may also take some minutes.
 You can verify the completion of the installation of the test case with the following commands:
 ```
-kubectl wait deployment -n grpl-test grpl-test-grpl-test-grapi grpl-test-grpl-test-gruim --for condition=Available=True --timeout=600s
+kubectl wait deployment -n grpl-dbfile grpl-dbfile-grpl-dbfile-grapi grpl-dbfile-grpl-dbfile-gruim --for condition=Available=True --timeout=600s
 ```
 
 
@@ -33,7 +33,7 @@ kubectl get gras,grapi,gruim -A
 
 ### for the automatically generated grapple instant API
 ```
-kubectl get ing -n grpl-test -l app.kubernetes.io/name=grapi -o custom-columns=HOST:..host
+kubectl get ing -n grpl-dbfile -l app.kubernetes.io/name=grapi -o custom-columns=HOST:..host
 ```
 And check the generated api in the browser
 
@@ -45,7 +45,7 @@ http://<yourNS>-<yourGrapiName>-grapi.<yourDNS>.grapple-demo.com/customers?filte
 
 ### and for the automatically generated grapple UI modules
 ```
-kubectl get ing -n grpl-test -l app.kubernetes.io/name=gruim -o custom-columns=HOST:..host
+kubectl get ing -n grpl-dbfile -l app.kubernetes.io/name=gruim -o custom-columns=HOST:..host
 ```
 And check the generated ui modules in the browser
 
