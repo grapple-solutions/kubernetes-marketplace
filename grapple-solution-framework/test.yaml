@@ -12,7 +12,8 @@ grapi:
   volumes:
   - name: data
     emptyDir: {}
-    # persistentVolumeClaim: grapi-dbfile
+    # persistentVolumeClaim: 
+    #   claimName: grapi-dbfile
   volumeMounts:
   - name: data
     mountPath: /data
@@ -22,7 +23,7 @@ grapi:
       memory:
         connector: "memory"
         name: "db"
-        file: "./db.json"
+        file: "/data/db.json"
         localStorage: "db"
   models:
   - name: "customers"
