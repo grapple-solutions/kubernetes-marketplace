@@ -157,7 +157,6 @@ CRD=composition/grapi.grsf.grpl.io && echo "wait for $CRD to be deployed:" && un
 
 helm upgrade --install ${TESTNS} oci://public.ecr.aws/p7h7z5g3/gras-deploy -n ${TESTNS} -f ./test.yaml --create-namespace 
 
-sleep 10
-
-kubectl wait deployment -n ${TESTNS} grpl-test-grpl-test-grapi --for condition=Available=True
+while ! kubectl wait deployment -n ${TESTNS} grpl-test-grpl-test-grapi --for condition=Progressing=True; do echo -n .; sleep 2; done
+sleep 3
 kubectl cp -n ${TESTNS} ./db.json grpl-test-grpl-test-grapi-66d4ff8684-mwdjz:/tmp/db.json -c init-db
