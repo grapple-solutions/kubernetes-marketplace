@@ -1,6 +1,6 @@
 gras: {}
 grapi:
-  beimagetag: "v0.113"
+  beimagetag: "v0.112"
   discoveredrepos: true
   ingress: true
   initContainers:
