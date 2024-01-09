@@ -12,7 +12,7 @@ grapi:
   volumes:
   - name: data
     # emptyDir: {}
-    persistentVolumeClaim: grapi-file
+    persistentVolumeClaim: grapi-dbfile
   volumeMounts:
   - name: data
     mountPath: /data
