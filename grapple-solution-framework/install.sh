@@ -155,7 +155,9 @@ CRD=grapi && echo "wait for $CRD to be deployed:" && until kubectl explain $CRD 
 CRD=compositegrappleapis && echo "wait for $CRD to be deployed:" && until kubectl explain $CRD >/dev/null 2>&1; do echo -n .; sleep 1; done && echo "$CRD deployed"
 CRD=composition/grapi.grsf.grpl.io && echo "wait for $CRD to be deployed:" && until kubectl get $CRD >/dev/null 2>&1; do echo -n .; sleep 1; done && echo "$CRD deployed"
 
-helm upgrade --install ${TESTNS} oci://public.ecr.aws/p7h7z5g3/gras-deploy -n ${TESTNS} -f ./test.yaml --create-namespace
+helm upgrade --install ${TESTNS} oci://public.ecr.aws/p7h7z5g3/gras-deploy -n ${TESTNS} -f ./test.yaml --create-namespace 
+
+sleep 10
 
 kubectl wait deployment -n ${TESTNS} grpl-test-grpl-test-grapi --for condition=Available=True
 kubectl cp -n ${TESTNS} ./db.json grpl-test-grpl-test-grapi-66d4ff8684-mwdjz:/tmp/db.json -c init-db
