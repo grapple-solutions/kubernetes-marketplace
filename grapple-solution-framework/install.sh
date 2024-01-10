@@ -58,12 +58,16 @@ EOF
 helm_deploy() {
     i=$1
     v=${2:=$VERSION}
-
+    if [ "$v" != "" ]; then 
+      version="--version ${v}"
+    else
+      version=""
+    fi
     echo
     echo "------"
     echo "helm upgrade --install $i oci://public.ecr.aws/${awsregistry}/$i -n ${NS} --create-namespace # + values-override.yaml"
     echo "------"
-    helm upgrade --install $i oci://public.ecr.aws/${awsregistry}/$i -n ${NS} --version ${v} --create-namespace -f ./values-override.yaml
+    helm upgrade --install $i oci://public.ecr.aws/${awsregistry}/$i -n ${NS} ${version} --create-namespace -f ./values-override.yaml
 }
 
 kubectl run grpl-dns-aws-route53-upsert-${GRAPPLE_DNS} --image=grpl/dns-aws-route53-upsert --env="GRAPPLE_DNS=${GRAPPLE_DNS}" --env="CIVO_MASTER_IP=${CIVO_MASTER_IP}" --restart=Never
