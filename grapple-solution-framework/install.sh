@@ -15,6 +15,13 @@ config:
   gruimversion: "0.0.1"
   ssl: "true"
   sslissuer: "letsencrypt-grapple-demo"
+  CIVO_CLUSTER_ID: ${CIVO_CLUSTER_ID}
+  CIVO_CLUSTER_NAME: ${CIVO_CLUSTER_NAME}
+  CIVO_REGION: ${CIVO_REGION}
+  CIVO_EMAIL_ADDRESS: ${CIVO_EMAIL_ADDRESS}
+  CIVO_MASTER_IP: ${CIVO_MASTER_IP}
+  GRAPPLE_DNS: ${GRAPPLE_DNS}
+  GRAPPLE_VERSION: ${VERSION}
 
 external-secrets:
   enabled: true
