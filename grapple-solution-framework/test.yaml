@@ -107,7 +107,7 @@ grapi:
       datasource: "db"
 
 gruim:
-  uiimagetag: "0.1.37"
+  uiimagetag: "0.1.38"
   ssl: true
   sslissuer: letsencrypt-grapple-demo
   style: '{"colors":{"primary":{"DEFAULT":"#34344A","fg":"#fff"},"accent":{"DEFAULT":"#CC5A71","fg":"#fff"}}}'
