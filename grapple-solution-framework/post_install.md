@@ -87,7 +87,6 @@ spec:
                     password: "${DBPW}"
                     database: "${DBSCHEMA}"
             discoveries:
-            spec:
             - name: "mydbdisc"
               spec:
                 dataSource: "mydb"
