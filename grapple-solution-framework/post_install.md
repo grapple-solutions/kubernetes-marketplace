@@ -63,7 +63,7 @@ export DBUSER=<your_db_user>
 export DBPW=<your_db_pw>
 export DBSCHEMA=<your_db_schema>
 
-kubectl apply -f - <<EOF
+kubectl apply -n yournamespace -f - <<EOF
 apiVersion: grsf.grpl.io/v1alpha1
 kind: GrappleApplicationSet
 metadata:
