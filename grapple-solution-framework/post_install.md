@@ -74,6 +74,7 @@ spec:
       - name: app1
         spec:
             discoveredrepos: true
+            ingress: true
             datasources:
             - name: "mydb"
               spec:
