@@ -67,11 +67,11 @@ kubectl apply -f - <<EOF
 apiVersion: grsf.grpl.io/v1alpha1
 kind: GrappleApplicationSet
 metadata:
-  name: mygras
+  name: app1
 spec:
-    name: mygras
+    name: app1
     grapis:
-      - name: mygrapi
+      - name: app1
         spec:
             discoveredrepos: true
             datasources:
@@ -107,7 +107,7 @@ spec:
               spec:
                 datasource: "mydb"
     gruims:
-      - name: mygruim
+      - name: app1
         spec:
             style: '{"colors":{"primary":{"DEFAULT":"#34344A","fg":"#fff"},"accent":{"DEFAULT":"#CC5A71","fg":"#fff"}}}'
             config: ""
