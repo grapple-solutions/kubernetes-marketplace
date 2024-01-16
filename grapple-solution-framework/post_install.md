@@ -73,7 +73,6 @@ spec:
     grapis:
       - name: mygrapi
         spec:
-            beimagetag: "v0.112"
             discoveredrepos: true
             datasources:
             - name: "mydb"
@@ -110,7 +109,6 @@ spec:
     gruims:
       - name: mygruim
         spec:
-            uiimagetag: "0.1.34"
             style: '{"colors":{"primary":{"DEFAULT":"#34344A","fg":"#fff"},"accent":{"DEFAULT":"#CC5A71","fg":"#fff"}}}'
             config: ""
             additionalpackages: ""
