@@ -180,7 +180,8 @@ TESTNSDB=grpl-db
 curl -fsSL https://kubeblocks.io/installer/install_cli.sh | bash
 sleep 2
 kbcli kubeblocks install --set image.registry="docker.io"
-k create ns ${TESTNSDB}
+
+kubectl create ns ${TESTNSDB} 2>/dev/null || true
 cat <<EOF | kubectl apply -f -n ${TESTNSDB} -
 apiVersion: apps.kubeblocks.io/v1alpha1
 kind: Cluster
