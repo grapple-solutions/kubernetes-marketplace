@@ -5,22 +5,23 @@ grapi:
   ingress: true
   ssl: true
   sslissuer: letsencrypt-grapple-demo
-  # initContainers:
-  # - name: test
-  #   spec:
-  #     name: init-db
-  #     image: busybox:1.28
-  #     command: ['sh', '-c', "if ! test -f /data/db.json; then while ! test -f /tmp/db.json; do echo -n .; sleep 2; done; echo; cp /tmp/db.json /data; chmod 777 /data/db.json; fi"]
+  extraSecrets: grappledb-conn-credential
+  initContainers:
+  - name: init-db
+    spec:
+      name: init-db
+      image: mysql
+      command: ['sh', '-c', "while ! mysql -e 'show databases;' 2>/dev/null; do echo -n .; sleep 2; done; while ! test -f /tmp/classicmodelsid.sql; do echo -n .; sleep 2; done; echo; mysql < /tmp/classicmodelsid.sql /data;"]
   datasources:
   - name: "classicmodelsdb"
     spec:
       mysql:
         name: "classicmodelsdb"
         url: ""
-        host: "aurora-mysql-test.cpfyybdyajmx.eu-central-1.rds.amazonaws.com"
-        port: "3306"
-        user: "admin"
-        password: "florida2012"
+        host: "${host}"
+        port: "${port}"
+        user: "${username}"
+        password: "${password}"
         database: classicmodelsid
   discoveries:
   - name: "classicmodelsdic"
