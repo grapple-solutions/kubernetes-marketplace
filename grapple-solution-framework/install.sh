@@ -168,7 +168,7 @@ CRD=compositegrappleapis && echo "wait for $CRD to be deployed:" && until kubect
 CRD=composition/grapi.grsf.grpl.io && echo "wait for $CRD to be deployed:" && until kubectl get $CRD >/dev/null 2>&1; do echo -n .; sleep 1; done && echo "$CRD deployed"
 CRD=composition/muim.grsf.grpl.io && echo "wait for $CRD to be deployed:" && until kubectl get $CRD >/dev/null 2>&1; do echo -n .; sleep 1; done && echo "$CRD deployed"
 
-helm upgrade --install ${TESTNS} oci://public.ecr.aws/p7h7z5g3/gras-deploy -n ${TESTNS} -f ./test.yaml --create-namespace 
+helm upgrade --install ${TESTNS} oci://public.ecr.aws/${awsregistry}/gras-deploy -n ${TESTNS} -f ./test.yaml --create-namespace 
 
 while ! kubectl wait deployment -n ${TESTNS} ${TESTNS}-${TESTNS}-grapi --for condition=Progressing=True 2>/dev/null; do echo -n .; sleep 2; done
 sleep 10
@@ -223,5 +223,5 @@ kubectl rollout status -n ${TESTNSDB} --watch --timeout=600s sts grappledb-mysql
 
 sleep 5 
 
-helm upgrade --install ${TESTNS} oci://public.ecr.aws/p7h7z5g3/gras-deploy -n ${TESTNS} -f ./test.yaml --create-namespace 
+helm upgrade --install ${TESTNSDB} oci://public.ecr.aws/${awsregistry}/gras-deploy -n ${TESTNSDB} -f ./test.yaml --create-namespace 
 
