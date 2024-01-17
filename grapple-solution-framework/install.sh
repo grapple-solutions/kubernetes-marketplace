@@ -176,7 +176,7 @@ if ! kubectl rollout status -n ${TESTNS} --watch --timeout=600s deploy -l app.ku
   kubectl cp -n ${TESTNS} ./db.json $(kubectl get po -n ${TESTNS} -l app.kubernetes.io/name=grapi -o name | sed "s,pod/,,g"):/tmp/db.json -c init-db
 fi
 
-
+echo "worked..."
 
 export TESTNSDB=grpl-db
 
@@ -225,5 +225,5 @@ kubectl rollout status -n ${TESTNSDB} --watch --timeout=600s sts grappledb
 
 sleep 5 
 
-helm upgrade --install -n ${TESTNSDB} ${TESTNSDB} oci://public.ecr.aws/p7h7z5g3/gras-deploy -f ./test2.yaml --create-namespace 
+helm upgrade --install ${TESTNS} oci://public.ecr.aws/p7h7z5g3/gras-deploy -n ${TESTNS} -f ./test.yaml --create-namespace 
 
