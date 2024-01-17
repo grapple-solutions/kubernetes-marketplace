@@ -172,7 +172,10 @@ helm upgrade --install ${TESTNS} oci://public.ecr.aws/p7h7z5g3/gras-deploy -n ${
 
 while ! kubectl wait deployment -n ${TESTNS} ${TESTNS}-${TESTNS}-grapi --for condition=Progressing=True 2>/dev/null; do echo -n .; sleep 2; done
 sleep 10
-kubectl cp -n ${TESTNS} ./db.json $(kubectl get po -n ${TESTNS} -l app.kubernetes.io/name=grapi -o name | sed "s,pod/,,g"):/tmp/db.json -c init-db
+if ! kubectl rollout status -n ${TESTNS} --watch --timeout=600s deploy -l app.kubernetes.io/name=grapi; then
+  kubectl cp -n ${TESTNS} ./db.json $(kubectl get po -n ${TESTNS} -l app.kubernetes.io/name=grapi -o name | sed "s,pod/,,g"):/tmp/db.json -c init-db
+fi
+
 
 
 TESTNSDB=grpl-db
@@ -222,5 +225,5 @@ kubectl rollout status -n ${TESTNSDB} --watch --timeout=600s sts grappledb
 
 sleep 5 
 
-helm upgrade --install ${TESTNSDB} oci://public.ecr.aws/p7h7z5g3/gras-deploy -n ${TESTNSDB} -f ./test2.yaml --create-namespace 
+helm upgrade --install -n ${TESTNSDB} ${TESTNSDB} oci://public.ecr.aws/p7h7z5g3/gras-deploy -f ./test2.yaml --create-namespace 
 
