@@ -189,7 +189,7 @@ fi
 
 kubectl create ns ${TESTNSDB} 2>/dev/null || true
 
-cat <<EOF | kubectl apply -n ${TESTNSDB} -f -
+kubectl apply -n ${TESTNSDB} -f - <<EOF
 apiVersion: apps.kubeblocks.io/v1alpha1
 kind: Cluster
 metadata:
