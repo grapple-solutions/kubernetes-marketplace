@@ -198,7 +198,7 @@ spec:
   componentSpecs:
   - componentDefRef: mysql
     name: mysql
-    replicas: 3
+    replicas: 1
     resources:
       limits:
         cpu: "1"
@@ -219,7 +219,7 @@ EOF
 
 sleep 5 
 
-kubectl rollout status -n ${TESTNSDB} --watch --timeout=600s sts grappledb
+kubectl rollout status -n ${TESTNSDB} --watch --timeout=600s sts grappledb-mysql
 
 sleep 5 
 
