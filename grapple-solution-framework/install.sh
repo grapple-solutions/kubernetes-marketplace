@@ -173,3 +173,47 @@ helm upgrade --install ${TESTNS} oci://public.ecr.aws/p7h7z5g3/gras-deploy -n ${
 while ! kubectl wait deployment -n ${TESTNS} ${TESTNS}-${TESTNS}-grapi --for condition=Progressing=True 2>/dev/null; do echo -n .; sleep 2; done
 sleep 10
 kubectl cp -n ${TESTNS} ./db.json $(kubectl get po -n ${TESTNS} -l app.kubernetes.io/name=grapi -o name | sed "s,pod/,,g"):/tmp/db.json -c init-db
+
+
+TESTNSDB=grpl-db
+
+curl -fsSL https://kubeblocks.io/installer/install_cli.sh | bash
+sleep 2
+kbcli kubeblocks install --set image.registry="docker.io"
+k create ns ${TESTNSDB}
+cat <<EOF | kubectl apply -f -n ${TESTNSDB} -
+apiVersion: apps.kubeblocks.io/v1alpha1
+kind: Cluster
+metadata:
+  name: grappledb
+spec:
+  clusterDefinitionRef: apecloud-mysql
+  clusterVersionRef: ac-mysql-8.0.30
+  componentSpecs:
+  - componentDefRef: mysql
+    name: mysql
+    replicas: 3
+    resources:
+      limits:
+        cpu: "1"
+        memory: 1Gi
+      requests:
+        cpu: "0.5"
+        memory: 500Mi
+    volumeClaimTemplates:
+    - name: data
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 20Gi
+  terminationPolicy: Delete
+EOF
+
+kubectl rollout status -n ${TESTNSDB} --watch --timeout=600s sts grappledb
+
+sleep 5 
+
+helm upgrade --install ${TESTNSDB} oci://public.ecr.aws/p7h7z5g3/gras-deploy -n ${TESTNSDB} -f ./test2.yaml --create-namespace 
+
