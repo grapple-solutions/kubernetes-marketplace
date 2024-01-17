@@ -178,8 +178,6 @@ fi
 
 echo "worked..."
 
-export TESTNSDB=grpl-db
-
 curl -fsSL https://kubeblocks.io/installer/install_cli.sh | bash
 sleep 2
 

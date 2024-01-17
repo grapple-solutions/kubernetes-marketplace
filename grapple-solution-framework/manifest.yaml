@@ -32,8 +32,11 @@ configuration:
     label: "namespace"
     value: "grpl-system"
   TESTNS:
-    label: "namespace for test"
+    label: "namespace for test case"
     value: "grpl-dbfile"
+  TESTNSDB:
+    label: "namespace for test case with DB"
+    value: "grpl-db"
   awsregistry:
     label: "id of the AWS registry"
     value: "p7h7z5g3"
