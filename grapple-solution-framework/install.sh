@@ -185,7 +185,8 @@ if ! kbcli kubeblocks status; then
 fi
 
 kubectl create ns ${TESTNSDB} 2>/dev/null || true
-cat <<EOF | kubectl apply -f -n ${TESTNSDB} -
+
+cat <<EOF | kubectl apply -n ${TESTNSDB} -f -
 apiVersion: apps.kubeblocks.io/v1alpha1
 kind: Cluster
 metadata:
@@ -214,6 +215,8 @@ spec:
             storage: 20Gi
   terminationPolicy: Delete
 EOF
+
+sleep 5 
 
 kubectl rollout status -n ${TESTNSDB} --watch --timeout=600s sts grappledb
 
