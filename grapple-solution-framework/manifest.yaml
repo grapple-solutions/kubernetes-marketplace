@@ -43,4 +43,16 @@ configuration:
   VERSION:
     label: "version of the grapple solution framework"
     value: "0.2.0"
-
+plans:
+  - label: "grapple solution framework basic edition"
+    configuration:
+      EDITION:
+        value: basic
+  - label: "grapple solution framework basic edition - with dbfile test case"
+    configuration:
+      EDITION:
+        value: basic-grpl-dbfile
+  - label: "grapple solution framework basic edition - with db test case"
+    configuration:
+      EDITION:
+        value: basic-grpl-db

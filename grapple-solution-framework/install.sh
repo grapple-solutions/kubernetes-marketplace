@@ -155,47 +155,58 @@ echo "enable ssl"
 kubectl apply -f ./clusterissuer.yaml
 
 
-echo 
-echo ----
-echo "deploy test case"
+if [ "${EDITION}" = "basic-grpl-dbfile" ]; then
 
-echo "check all crossplane packages are ready"
-for i in $(kubectl get pkg -o name); do kubectl wait --for=condition=Healthy $i; done
+  echo 
+  echo ----
+  echo "deploy test case: dbfile"
 
-echo "check xrds are available"
-CRD=grapi && echo "wait for $CRD to be deployed:" && until kubectl explain $CRD >/dev/null 2>&1; do echo -n .; sleep 1; done && echo "$CRD deployed"
-CRD=compositegrappleapis && echo "wait for $CRD to be deployed:" && until kubectl explain $CRD >/dev/null 2>&1; do echo -n .; sleep 1; done && echo "$CRD deployed"
-CRD=composition/grapi.grsf.grpl.io && echo "wait for $CRD to be deployed:" && until kubectl get $CRD >/dev/null 2>&1; do echo -n .; sleep 1; done && echo "$CRD deployed"
-CRD=composition/muim.grsf.grpl.io && echo "wait for $CRD to be deployed:" && until kubectl get $CRD >/dev/null 2>&1; do echo -n .; sleep 1; done && echo "$CRD deployed"
+  echo "check all crossplane packages are ready"
+  for i in $(kubectl get pkg -o name); do kubectl wait --for=condition=Healthy $i; done
 
-helm upgrade --install ${TESTNS} oci://public.ecr.aws/${awsregistry}/gras-deploy -n ${TESTNS} -f ./test.yaml --create-namespace 
+  echo "check xrds are available"
+  CRD=grapi && echo "wait for $CRD to be deployed:" && until kubectl explain $CRD >/dev/null 2>&1; do echo -n .; sleep 1; done && echo "$CRD deployed"
+  CRD=compositegrappleapis && echo "wait for $CRD to be deployed:" && until kubectl explain $CRD >/dev/null 2>&1; do echo -n .; sleep 1; done && echo "$CRD deployed"
+  CRD=composition/grapi.grsf.grpl.io && echo "wait for $CRD to be deployed:" && until kubectl get $CRD >/dev/null 2>&1; do echo -n .; sleep 1; done && echo "$CRD deployed"
+  CRD=composition/muim.grsf.grpl.io && echo "wait for $CRD to be deployed:" && until kubectl get $CRD >/dev/null 2>&1; do echo -n .; sleep 1; done && echo "$CRD deployed"
 
-sleep 10
+  helm upgrade --install ${TESTNS} oci://public.ecr.aws/${awsregistry}/gras-deploy -n ${TESTNS} -f ./test.yaml --create-namespace 
 
-if [ "$(kubectl get -n ${TESTNS} $(kubectl get po -n ${TESTNS} -l app.kubernetes.io/name=grapi -o name) --template '{{(index .status.initContainerStatuses 0).ready}}')" = "false" ]; then
-  kubectl cp -n ${TESTNS} ./db.json $(kubectl get po -n ${TESTNS} -l app.kubernetes.io/name=grapi -o name | sed "s,pod/,,g"):/tmp/db.json -c init-db
+  sleep 10
+
+  if [ "$(kubectl get -n ${TESTNS} $(kubectl get po -n ${TESTNS} -l app.kubernetes.io/name=grapi -o name) --template '{{(index .status.initContainerStatuses 0).ready}}')" = "false" ]; then
+    kubectl cp -n ${TESTNS} ./db.json $(kubectl get po -n ${TESTNS} -l app.kubernetes.io/name=grapi -o name | sed "s,pod/,,g"):/tmp/db.json -c init-db
+  fi
+
+  # wait for the grapi of the first test case to be deployed
+  # while ! kubectl wait deployment -n ${TESTNS} ${TESTNS}-${TESTNS}-grapi --for condition=Progressing=True 2>/dev/null; do echo -n .; sleep 2; done
+
 fi
 
-# wait for the grapi of the first test case to be deployed
-# while ! kubectl wait deployment -n ${TESTNS} ${TESTNS}-${TESTNS}-grapi --for condition=Progressing=True 2>/dev/null; do echo -n .; sleep 2; done
 
+if [ "${EDITION}" = "basic-grpl-db" ]; then
 
-curl -fsSL https://kubeblocks.io/installer/install_cli.sh | bash
-sleep 2
+  echo 
+  echo ----
+  echo "deploy test case: db"
 
-if ! kbcli cluster list; then 
-  kbcli kubeblocks install --set image.registry="docker.io"
+  curl -fsSL https://kubeblocks.io/installer/install_cli.sh | bash
+  sleep 2
+
+  if ! kbcli cluster list; then 
+    kbcli kubeblocks install --set image.registry="docker.io"
+  fi
+
+  kubectl create ns ${TESTNSDB} 2>/dev/null || true
+
+  kubectl apply -n ${TESTNSDB} -f ./db.yaml
+
+  sleep 5 
+
+  kubectl rollout status -n ${TESTNSDB} --watch --timeout=600s sts grappledb-mysql
+
+  sleep 5 
+
+  helm upgrade --install ${TESTNSDB} oci://public.ecr.aws/${awsregistry}/gras-deploy -n ${TESTNSDB} -f ./testdb.yaml --create-namespace 
+
 fi
-
-kubectl create ns ${TESTNSDB} 2>/dev/null || true
-
-kubectl apply -n ${TESTNSDB} -f ./db.yaml
-
-sleep 5 
-
-kubectl rollout status -n ${TESTNSDB} --watch --timeout=600s sts grappledb-mysql
-
-sleep 5 
-
-helm upgrade --install ${TESTNSDB} oci://public.ecr.aws/${awsregistry}/gras-deploy -n ${TESTNSDB} -f ./testdb.yaml --create-namespace 
-
