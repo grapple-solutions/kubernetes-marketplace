@@ -176,12 +176,14 @@ if [ "$(kubectl get -n ${TESTNS} $(kubectl get po -n ${TESTNS} -l app.kubernetes
   kubectl cp -n ${TESTNS} ./db.json $(kubectl get po -n ${TESTNS} -l app.kubernetes.io/name=grapi -o name | sed "s,pod/,,g"):/tmp/db.json -c init-db
 fi
 
-while ! kubectl wait deployment -n ${TESTNS} ${TESTNS}-${TESTNS}-grapi --for condition=Progressing=True 2>/dev/null; do echo -n .; sleep 2; done
+# wait for the grapi of the first test case to be deployed
+# while ! kubectl wait deployment -n ${TESTNS} ${TESTNS}-${TESTNS}-grapi --for condition=Progressing=True 2>/dev/null; do echo -n .; sleep 2; done
+
 
 curl -fsSL https://kubeblocks.io/installer/install_cli.sh | bash
 sleep 2
 
-if ! kbcli kubeblocks status; then 
+if ! kbcli cluster list; then 
   kbcli kubeblocks install --set image.registry="docker.io"
 fi
 
