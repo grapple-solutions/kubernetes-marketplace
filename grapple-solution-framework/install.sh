@@ -165,15 +165,14 @@ echo ----
 echo "enable ssl"
 kubectl apply -f ./clusterissuer.yaml
 
+echo "check all crossplane packages are ready"
+for i in $(kubectl get pkg -o name); do kubectl wait --for=condition=Healthy $i; done
 
 if [ "${EDITION}" = "grpl-basic-dbfile" ]; then
 
   echo 
   echo ----
   echo "deploy test case: dbfile"
-
-  echo "check all crossplane packages are ready"
-  for i in $(kubectl get pkg -o name); do kubectl wait --for=condition=Healthy $i; done
 
   echo "check xrds are available"
   CRD=grapi && echo "wait for $CRD to be deployed:" && until kubectl explain $CRD >/dev/null 2>&1; do echo -n .; sleep 1; done && echo "$CRD deployed"
@@ -201,6 +200,10 @@ if [ "${EDITION}" = "grpl-basic-db" ]; then
   echo ----
   echo "deploy test case: db"
 
+  for i in $(kubectl get clusterversion -o name); do 
+    kubectl get $i -o yaml | sed "s,infracreate-registry.cn-zhangjiakou.cr.aliyuncs.com,docker.io,g" | kubectl apply -f -; 
+  done
+
   kubectl create ns ${TESTNSDB} 2>/dev/null || true
 
   kubectl apply -n ${TESTNSDB} -f ./db.yaml
@@ -213,7 +216,7 @@ if [ "${EDITION}" = "grpl-basic-db" ]; then
 
   helm upgrade --install ${TESTNSDB} oci://public.ecr.aws/${awsregistry}/gras-deploy -n ${TESTNSDB} -f ./testdb.yaml --create-namespace 
 
-  sleep 10
+  sleep 15
 
   if [ "$(kubectl get -n ${TESTNSDB} $(kubectl get po -n ${TESTNSDB} -l app.kubernetes.io/name=grapi -o name) --template '{{(index .status.initContainerStatuses 0).ready}}')" = "false" ]; then
     kubectl cp -n ${TESTNSDB} ./classicmodelsid.tgz $(kubectl get po -n ${TESTNSDB} -l app.kubernetes.io/name=grapi -o name | sed "s,pod/,,g"):/tmp/classicmodelsid.tgz -c init-db
