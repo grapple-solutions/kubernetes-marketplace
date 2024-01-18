@@ -47,12 +47,12 @@ plans:
   - label: "grapple solution framework basic edition"
     configuration:
       EDITION:
-        value: basic
+        value: grpl-basic
   - label: "grapple solution framework basic edition - with dbfile test case"
     configuration:
       EDITION:
-        value: basic-grpl-dbfile
+        value: grpl-basic-dbfile
   - label: "grapple solution framework basic edition - with db test case"
     configuration:
       EDITION:
-        value: basic-grpl-db
+        value: grpl-basic-db

@@ -155,7 +155,7 @@ echo "enable ssl"
 kubectl apply -f ./clusterissuer.yaml
 
 
-if [ "${EDITION}" = "basic-grpl-dbfile" ]; then
+if [ "${EDITION}" = "grpl-basic-dbfile" ]; then
 
   echo 
   echo ----
@@ -184,7 +184,7 @@ if [ "${EDITION}" = "basic-grpl-dbfile" ]; then
 fi
 
 
-if [ "${EDITION}" = "basic-grpl-db" ]; then
+if [ "${EDITION}" = "grpl-basic-db" ]; then
 
   echo 
   echo ----
