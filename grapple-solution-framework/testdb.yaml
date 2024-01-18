@@ -19,10 +19,10 @@ grapi:
       mysql:
         name: "classicmodelsdb"
         url: ""
-        host: "${host}"
-        port: "${port}"
-        user: "${username}"
-        password: "${password}"
+        host: "\${host}"
+        port: "\${port}"
+        user: "\${username}"
+        password: "\${password}"
         database: classicmodelsid
   discoveries:
   - name: "classicmodelsdic"
