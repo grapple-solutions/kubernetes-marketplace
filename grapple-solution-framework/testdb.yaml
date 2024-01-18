@@ -12,7 +12,7 @@ grapi:
     spec:
       name: init-db
       image: mysql
-      command: ['sh', '-c', "while ! mysql -e 'show databases;' 2>/dev/null; do echo -n .; sleep 2; done; while ! test -f /tmp/classicmodelsid.sql; do echo -n .; sleep 2; done; echo; mysql < /tmp/classicmodelsid.sql /data;"]
+      command: ['sh', '-c', "while ! mysql -e 'show databases;' 2>/dev/null; do echo -n .; sleep 2; done; while ! test -f /tmp/classicmodelsid.tgz; do echo -n .; sleep 2; done; echo; cd tmp; tar xvfz classicmodelsid.tgz; mysql < /tmp/classicmodelsid.sql;"]
   datasources:
   - name: "classicmodelsdb"
     spec:
