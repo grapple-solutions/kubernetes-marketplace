@@ -79,7 +79,7 @@ helm_deploy() {
 
 kubectl run grpl-dns-aws-route53-upsert-${GRAPPLE_DNS} --image=grpl/dns-aws-route53-upsert --env="GRAPPLE_DNS=${GRAPPLE_DNS}" --env="CIVO_MASTER_IP=${CIVO_MASTER_IP}" --restart=Never
 
-if [ "${EDITION}" = "grpl-basic-db" ]; then
+if [ "${EDITION}" = "grpl-basic-db" ] || [ "${EDITION}" = "grpl-basic-all" ]; then
 
   curl -fsSL https://kubeblocks.io/installer/install_cli.sh | bash
   sleep 2
@@ -168,7 +168,7 @@ kubectl apply -f ./clusterissuer.yaml
 echo "check all crossplane packages are ready"
 for i in $(kubectl get pkg -o name); do kubectl wait --for=condition=Healthy $i; done
 
-if [ "${EDITION}" = "grpl-basic-dbfile" ]; then
+if [ "${EDITION}" = "grpl-basic-dbfile" ] || [ "${EDITION}" = "grpl-basic-all" ]; then
 
   echo 
   echo ----
@@ -194,7 +194,7 @@ if [ "${EDITION}" = "grpl-basic-dbfile" ]; then
 fi
 
 
-if [ "${EDITION}" = "grpl-basic-db" ]; then
+if [ "${EDITION}" = "grpl-basic-db" ] || [ "${EDITION}" = "grpl-basic-all" ]; then
 
   echo 
   echo ----

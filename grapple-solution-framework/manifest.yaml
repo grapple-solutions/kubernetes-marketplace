@@ -56,3 +56,7 @@ plans:
     configuration:
       EDITION:
         value: grpl-basic-db
+  - label: "grapple solution framework basic edition - with all test cases"
+    configuration:
+      EDITION:
+        value: grpl-basic-all
