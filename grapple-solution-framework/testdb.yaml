@@ -5,7 +5,8 @@ grapi:
   ingress: true
   ssl: true
   sslissuer: letsencrypt-grapple-demo
-  extraSecrets: grappledb-conn-credential
+  extraSecrets: 
+  - grappledb-conn-credential
   initContainers:
   - name: init-db
     spec:
