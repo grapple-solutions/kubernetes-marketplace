@@ -170,12 +170,13 @@ CRD=composition/muim.grsf.grpl.io && echo "wait for $CRD to be deployed:" && unt
 
 helm upgrade --install ${TESTNS} oci://public.ecr.aws/${awsregistry}/gras-deploy -n ${TESTNS} -f ./test.yaml --create-namespace 
 
-while ! kubectl wait deployment -n ${TESTNS} ${TESTNS}-${TESTNS}-grapi --for condition=Progressing=True 2>/dev/null; do echo -n .; sleep 2; done
 sleep 10
 
 if [ "$(kubectl get -n ${TESTNS} $(kubectl get po -n ${TESTNS} -l app.kubernetes.io/name=grapi -o name) --template '{{(index .status.initContainerStatuses 0).ready}}')" = "false" ]; then
   kubectl cp -n ${TESTNS} ./db.json $(kubectl get po -n ${TESTNS} -l app.kubernetes.io/name=grapi -o name | sed "s,pod/,,g"):/tmp/db.json -c init-db
 fi
+
+while ! kubectl wait deployment -n ${TESTNS} ${TESTNS}-${TESTNS}-grapi --for condition=Progressing=True 2>/dev/null; do echo -n .; sleep 2; done
 
 curl -fsSL https://kubeblocks.io/installer/install_cli.sh | bash
 sleep 2
