@@ -172,6 +172,9 @@ helm upgrade --install ${TESTNS} oci://public.ecr.aws/${awsregistry}/gras-deploy
 
 while ! kubectl wait deployment -n ${TESTNS} ${TESTNS}-${TESTNS}-grapi --for condition=Progressing=True 2>/dev/null; do echo -n .; sleep 2; done
 sleep 10
+
+exit 0
+
 if ! kubectl rollout status -n ${TESTNS} --watch --timeout=600s deploy -l app.kubernetes.io/name=grapi; then
   kubectl cp -n ${TESTNS} ./db.json $(kubectl get po -n ${TESTNS} -l app.kubernetes.io/name=grapi -o name | sed "s,pod/,,g"):/tmp/db.json -c init-db
 fi
