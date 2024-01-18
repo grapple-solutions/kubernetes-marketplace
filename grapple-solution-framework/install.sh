@@ -189,35 +189,7 @@ fi
 
 kubectl create ns ${TESTNSDB} 2>/dev/null || true
 
-kubectl apply -n ${TESTNSDB} -f - <<EOF
-apiVersion: apps.kubeblocks.io/v1alpha1
-kind: Cluster
-metadata:
-  name: grappledb
-spec:
-  clusterDefinitionRef: apecloud-mysql
-  clusterVersionRef: ac-mysql-8.0.30
-  componentSpecs:
-  - componentDefRef: mysql
-    name: mysql
-    replicas: 1
-    resources:
-      limits:
-        cpu: "1"
-        memory: 1Gi
-      requests:
-        cpu: "0.5"
-        memory: 500Mi
-    volumeClaimTemplates:
-    - name: data
-      spec:
-        accessModes:
-        - ReadWriteOnce
-        resources:
-          requests:
-            storage: 20Gi
-  terminationPolicy: Delete
-EOF
+kubectl apply -n ${TESTNSDB} -f ./db.yaml
 
 sleep 5 
 
@@ -225,5 +197,5 @@ kubectl rollout status -n ${TESTNSDB} --watch --timeout=600s sts grappledb-mysql
 
 sleep 5 
 
-helm upgrade --install ${TESTNSDB} oci://public.ecr.aws/${awsregistry}/gras-deploy -n ${TESTNSDB} -f ./test.yaml --create-namespace 
+helm upgrade --install ${TESTNSDB} oci://public.ecr.aws/${awsregistry}/gras-deploy -n ${TESTNSDB} -f ./testdb.yaml --create-namespace 
 
