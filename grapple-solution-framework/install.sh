@@ -79,6 +79,17 @@ helm_deploy() {
 
 kubectl run grpl-dns-aws-route53-upsert-${GRAPPLE_DNS} --image=grpl/dns-aws-route53-upsert --env="GRAPPLE_DNS=${GRAPPLE_DNS}" --env="CIVO_MASTER_IP=${CIVO_MASTER_IP}" --restart=Never
 
+if [ "${EDITION}" = "grpl-basic-db" ]; then
+
+  curl -fsSL https://kubeblocks.io/installer/install_cli.sh | bash
+  sleep 2
+
+  if ! kbcli cluster list; then 
+    kbcli kubeblocks install --set image.registry="docker.io" &
+  fi
+
+fi
+
 echo 
 echo ----
 echo "deploy grsf-init"
@@ -190,18 +201,11 @@ if [ "${EDITION}" = "grpl-basic-db" ]; then
   echo ----
   echo "deploy test case: db"
 
-  curl -fsSL https://kubeblocks.io/installer/install_cli.sh | bash
-  sleep 2
-
-  if ! kbcli cluster list; then 
-    kbcli kubeblocks install --set image.registry="docker.io"
-  fi
-
   kubectl create ns ${TESTNSDB} 2>/dev/null || true
 
   kubectl apply -n ${TESTNSDB} -f ./db.yaml
 
-  sleep 5 
+  sleep 10 
 
   kubectl rollout status -n ${TESTNSDB} --watch --timeout=600s sts grappledb-mysql
 
