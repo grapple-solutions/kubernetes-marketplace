@@ -40,6 +40,10 @@ cert-manager:
 
 crossplane:
   enabled: true
+  args: '{"--enable-composition-functions"}'
+  xfn:
+    enabled: true
+    # args: '{--debug}'
   kubernetes:
     enabled: true
     local:
